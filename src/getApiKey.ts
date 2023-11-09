@@ -4,19 +4,10 @@ import { randomBytes } from "crypto";
 import ddb, { authPK } from "./ddb";
 import fetch from "node-fetch";
 import { minAmount, toAddress } from "./constants";
+import { errorResponse, successResponse } from "./utils/lambda-response";
 
 const FRONTEND_DOMAIN = "defillama.com"
 const CHAIN_ID = "1"
-
-function errorResponse(data){
-    return {
-
-    }
-}
-
-function successResponse(data){
-    return data
-}
 
 function getValue(raw: string) {
     return raw.substring(raw.indexOf(": ") + 2)

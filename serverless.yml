@@ -61,6 +61,12 @@ custom:
   logRetentionInDays: 30
 
 functions:
+  fallback:
+    handler: src/fallback.default
+    events:
+      - http:
+          path: /{params+}
+          method: any
   checkSubscriptions:
     handler: src/checkSubscriptions.default
     timeout: 30
