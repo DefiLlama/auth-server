@@ -1,0 +1,80 @@
+service: auth
+
+package:
+  individually: true
+  excludeDevDependencies: true
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  lambdaHashingVersion: 20201221
+  memorySize: 250
+  region: eu-central-1
+  stage: prod # Default to dev if no stage is specified
+  tracing: # Enable X-Ray tracing (debugging)
+    apiGateway: true
+    lambda: true
+  iamRoleStatements:
+    - Effect: Allow # X-Ray permissions
+      Action:
+        - xray:PutTraceSegments
+        - xray:PutTelemetryRecords
+      Resource: "*"
+    - Effect: "Allow"
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+        - dynamodb:BatchGetItem
+      Resource:
+        - "arn:aws:dynamodb:eu-central-1:856461987125:table/auth"
+    - Effect: Allow # Lambda logs on cloudwatch
+      Action:
+        - logs:CreateLogGroup
+        - logs:CreateLogStream
+        - logs:PutLogEvents
+      Resource:
+        - "Fn::Join":
+            - ":"
+            - - "arn:aws:logs"
+              - Ref: "AWS::Region"
+              - Ref: "AWS::AccountId"
+              - "log-group:/aws/lambda/*:*:*"
+  environment:
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  esbuild:
+    bundle: true
+    minify: false
+    concurrency: 4
+    # for debugging
+    #keepOutputDirectory: true
+  prune:
+    automatic: true
+    number: 5 # Number of versions to keep
+  logRetentionInDays: 30
+
+functions:
+  checkSubscriptions:
+    handler: src/checkSubscriptions.default
+    timeout: 30
+    events:
+      - schedule: cron(0 * * * ? *)
+  getApiKey:
+    handler: src/getApiKey.default
+    timeout: 30
+    events:
+      - http:
+          path: auth/api-key
+          method: post
+
+plugins:
+  - serverless-esbuild
+  - serverless-prune-plugin
+  - serverless-plugin-log-retention

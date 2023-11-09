@@ -1,0 +1,27 @@
+{
+  "name": "auth-server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "sls package",
+    "deploy": "sls deploy"
+  },
+  "keywords": [],
+  "author": "",
+  "dependencies": {
+    "@types/aws-lambda": "^8.10.126",
+    "ethers": "^6.8.1",
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "aws-sdk": "^2.1491.0",
+    "esbuild": "^0.19.5",
+    "serverless": "^3.36.0",
+    "serverless-esbuild": "^1.48.5",
+    "serverless-plugin-log-retention": "^2.0.0",
+    "serverless-prune-plugin": "^2.0.2",
+    "typescript": "^5.2.2"
+  }
+}
