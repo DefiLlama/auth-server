@@ -78,6 +78,20 @@ functions:
     events:
       - http:
           path: auth/api-key
+          method: get
+  generateApiKey:
+    handler: src/getApiKey.default
+    timeout: 30
+    events:
+      - http:
+          path: auth/api-key
+          method: post
+  signIn:
+    handler: src/sign-in.default
+    timeout: 30
+    events:
+      - http:
+          path: sign-in
           method: post
 
 plugins:

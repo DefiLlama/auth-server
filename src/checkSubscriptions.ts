@@ -1,6 +1,6 @@
 import fetch from "node-fetch";
-import ddb, { authPK, getAllItems } from "./ddb";
-import { minAmount, toAddress } from "./constants";
+import ddb, { authPK, getAllItems } from "./utils/ddb";
+import { minAmount, toAddress } from "./utils/constants";
 
 async function getAllSubscribers(){
     return fetch("https://api.thegraph.com/subgraphs/name/0xngmi/llamasubs-optimism", {
