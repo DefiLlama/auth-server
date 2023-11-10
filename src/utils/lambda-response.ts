@@ -1,4 +1,4 @@
-export function errorResponse(data){
+export function errorResponse(data:any){
     return {
         statusCode: 400,
         body: JSON.stringify(data),
@@ -8,7 +8,7 @@ export function errorResponse(data){
     }
 }
 
-export function successResponse(data){
+export function successResponse(data:any){
     return {
         statusCode: 200,
         body: JSON.stringify(data),

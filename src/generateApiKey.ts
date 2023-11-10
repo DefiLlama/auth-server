@@ -32,7 +32,7 @@ async function generateApiKey(address:string){
 
 const handler = async (event: AWSLambda.APIGatewayEvent) => {
     const signedIn= await ddb.get({
-        PK: `login#${event.headers.authentication}`
+        PK: `login#${event.headers.Authorization}`
     })
     if(!signedIn.Item){
         return errorResponse({ message: "bad signature" })

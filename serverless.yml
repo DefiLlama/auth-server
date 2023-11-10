@@ -80,11 +80,11 @@ functions:
           path: auth/api-key
           method: get
   generateApiKey:
-    handler: src/getApiKey.default
+    handler: src/generateApiKey.default
     timeout: 30
     events:
       - http:
-          path: auth/api-key
+          path: auth/generate
           method: post
   signIn:
     handler: src/sign-in.default
