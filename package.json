@@ -6,7 +6,8 @@
   "main": "index.js",
   "scripts": {
     "build": "sls package",
-    "deploy": "sls deploy"
+    "deploy": "sls deploy",
+    "offline": "node --max-old-space-size=8192 node_modules/serverless/bin/serverless offline start --httpPort 3001"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +21,7 @@
     "esbuild": "^0.19.5",
     "serverless": "^3.36.0",
     "serverless-esbuild": "^1.48.5",
+    "serverless-offline": "^9.1.6",
     "serverless-plugin-log-retention": "^2.0.0",
     "serverless-prune-plugin": "^2.0.2",
     "typescript": "^5.2.2"

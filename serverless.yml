@@ -93,8 +93,16 @@ functions:
       - http:
           path: sign-in
           method: post
+  githubSignIn:
+    handler: src/github-sign-in.default
+    timeout: 30
+    events:
+      - http:
+          path: github-sign-in
+          method: get
 
 plugins:
   - serverless-esbuild
+  - serverless-offline
   - serverless-prune-plugin
   - serverless-plugin-log-retention
