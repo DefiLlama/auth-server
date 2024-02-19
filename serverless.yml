@@ -99,7 +99,7 @@ functions:
     events:
       - http:
           path: github-sign-in
-          method: get
+          method: post
 
 plugins:
   - serverless-esbuild

@@ -37,8 +37,7 @@ async function getGithubUser(accessToken) {
 const contributersList: string[] = []; // TODO: use real contributers list
 
 const handler = async (event: AWSLambda.APIGatewayEvent) => {
-  const code = event.queryStringParameters?.code!;
-  const accessToken = event.queryStringParameters?.access_token!;
+  const { code, accessToken } = JSON.parse(event.body!);
 
   try {
     const token = accessToken ?? (await exchangeCodeForAccessToken(code));
