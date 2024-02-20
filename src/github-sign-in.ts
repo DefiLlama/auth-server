@@ -2,6 +2,7 @@ import { randomBytes } from "crypto";
 import { errorResponse, successResponse } from "./utils/lambda-response";
 import ddb from "./utils/ddb";
 import { generateApiKey } from "./generateApiKey";
+import contributorsList from "./data/uniqueContributors.json";
 
 async function exchangeCodeForAccessToken(code) {
   const clientId = "434392c1d50567bcc6a9"; // TODO: move to env
@@ -34,8 +35,6 @@ async function getGithubUser(accessToken) {
   return res;
 }
 
-const contributersList: string[] = []; // TODO: use real contributers list
-
 const handler = async (event: AWSLambda.APIGatewayEvent) => {
   const { code, accessToken } = JSON.parse(event.body!);
 
@@ -44,8 +43,13 @@ const handler = async (event: AWSLambda.APIGatewayEvent) => {
     const user = await getGithubUser(token);
     const login = `github#${user.login}`;
 
-    if (contributersList.includes(user.login)) {
-      return errorResponse({ message: "User is not a contributer" });
+    if (!contributorsList.includes(user.login)) {
+      return successResponse({
+        apiKey: null,
+        token,
+        login: user.login,
+        isContributor: false,
+      });
     }
 
     const loginKey = randomBytes(40).toString("base64url");
@@ -62,10 +66,20 @@ const handler = async (event: AWSLambda.APIGatewayEvent) => {
     const apiKey = apikeyItem.Item?.apiKey ?? null;
 
     if (apiKey) {
-      return successResponse({ apiKey, token });
+      return successResponse({
+        apiKey,
+        token,
+        login: user.login,
+        isContributor: true,
+      });
     } else {
       const apiKey = await generateApiKey(login);
-      return successResponse({ apiKey, token });
+      return successResponse({
+        apiKey,
+        token,
+        login: user.login,
+        isContributor: true,
+      });
     }
   } catch (e) {
     return errorResponse({ message: e.message });
