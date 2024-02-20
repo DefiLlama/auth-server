@@ -25,6 +25,8 @@ async function getAllSubscribers(){
     }).then(r => r.json()).then((r:any) => r.data.subs as any[])
 }
 
+const DAYS_90 = 3600 * 24 * 90;
+
 export default async function checkSubscriptions(){
     const [allKeys, allSubscribers] = await Promise.all([
         getAllItems(),
@@ -36,18 +38,30 @@ export default async function checkSubscriptions(){
         all[sub.owner]=true
         return all
     }, {})
-    await Promise.all(allKeys.map(async ({PK})=>{
+    await Promise.all(allKeys.map(async ({PK, date})=>{
         if(!PK.startsWith(authPK(""))){
             return
         }
-        const address = PK.substring(authPK("").length).toLowerCase()
-        if(!subs[address]){
-            console.log(`delete ${PK}`)
-            /*
-            ddb.delete({
-                Key:{PK} 
-            })
-            */
+        if (PK.includes('github#')) {
+            if (Date.now() /1000 - date > DAYS_90) {
+                console.log(`delete ${PK}`)
+                /*
+                ddb.delete({
+                    Key:{PK} 
+                })
+                */
+            }
         }
+        else {
+            const address = PK.substring(authPK("").length).toLowerCase()
+            if(!subs[address]){
+                console.log(`delete ${PK}`)
+                /*
+                ddb.delete({
+                    Key:{PK} 
+                })
+                */
+            }
+    }
     }))
 }

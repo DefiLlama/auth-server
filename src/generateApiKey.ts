@@ -4,13 +4,14 @@ import { errorResponse, successResponse } from "./utils/lambda-response";
 import { isSubscribed } from "./utils/subscriptions";
 
 
-async function generateApiKey(address:string){
+export async function generateApiKey(address:string){
     // This system is vulnerable to race conditions to generate multiple api keys but thats not a big issue since we'll detect it anyway
     // and theres no point in getting multiple api keys
     const addresKeyPK = `addressKey#${address.toLowerCase()}`
     const prevApiKey = await ddb.get({
         PK: addresKeyPK,
     })
+    const now = (Date.now() / 1000).toFixed(0)
     if (prevApiKey.Item) {
         await ddb.delete({
             Key: {
@@ -21,11 +22,13 @@ async function generateApiKey(address:string){
     const apiKey = randomBytes(40).toString("base64url")
     await ddb.put({
         PK: authPK(apiKey),
-        address: address.toLowerCase()
+        address: address.toLowerCase(),
+        date: now
     })
     await ddb.put({
         PK: addresKeyPK,
-        apiKey
+        apiKey,
+        date: now
     })
     return apiKey
 }
