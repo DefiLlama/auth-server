@@ -104,7 +104,7 @@ async function getContributorsWithUniqueMonthsOfCommits(
         months.add(monthYear);
       });
 
-      if (months.size >= 3) {
+      if (months.size >= 2 && commits.length >= 5) {
         uniqueContributors[contributors[index].login as any] =
           Array.from(months);
       }
