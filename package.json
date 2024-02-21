@@ -7,7 +7,8 @@
   "scripts": {
     "build": "sls package",
     "deploy": "sls deploy",
-    "offline": "node --max-old-space-size=8192 node_modules/serverless/bin/serverless offline start --httpPort 3001"
+    "offline": "node --max-old-space-size=8192 node_modules/serverless/bin/serverless offline start --httpPort 3001",
+    "updateContributors": "ts-node ./src/scripts/getContributors.ts"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +18,7 @@
     "node-fetch": "^3.3.2"
   },
   "devDependencies": {
+    "@octokit/core": "^5.1.0",
     "aws-sdk": "^2.1491.0",
     "esbuild": "^0.19.5",
     "serverless": "^3.36.0",
