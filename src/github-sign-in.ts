@@ -4,8 +4,8 @@ import ddb from "./utils/ddb";
 import { generateApiKey } from "./generateApiKey";
 import contributorsList from "./data/uniqueContributors.json";
 
-const clientId = process.env.GITHUB_CLIENT_ID || "";
-const clientSecret = process.env.GITHUB_CLIENT_SECRET || "";
+const clientId = process.env.GH_CLIENT_ID || "";
+const clientSecret = process.env.GH_CLIENT_SECRET || "";
 
 async function exchangeCodeForAccessToken(code) {
   const body = new URLSearchParams();
