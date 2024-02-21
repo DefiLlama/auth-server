@@ -4,9 +4,10 @@ import ddb from "./utils/ddb";
 import { generateApiKey } from "./generateApiKey";
 import contributorsList from "./data/uniqueContributors.json";
 
+const clientId = process.env.GITHUB_CLIENT_ID || "";
+const clientSecret = process.env.GITHUB_CLIENT_SECRET || "";
+
 async function exchangeCodeForAccessToken(code) {
-  const clientId = "434392c1d50567bcc6a9"; // TODO: move to env
-  const clientSecret = "11e861b00b9722a78f8e9dddf01ee8f0e5689fb0"; // TODO: move to env;
   const body = new URLSearchParams();
   body.append("client_id", clientId);
   body.append("client_secret", clientSecret);

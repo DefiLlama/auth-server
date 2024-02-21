@@ -43,24 +43,20 @@ export default async function checkSubscriptions(){
             return
         }
         if (PK.includes('github#')) {
-            if (Date.now() /1000 - date > DAYS_90) {
+            if (Date.now() / 1000 - date > DAYS_90) {
                 console.log(`delete ${PK}`)
-                /*
                 ddb.delete({
                     Key:{PK} 
                 })
-                */
             }
         }
         else {
             const address = PK.substring(authPK("").length).toLowerCase()
             if(!subs[address]){
                 console.log(`delete ${PK}`)
-                /*
                 ddb.delete({
                     Key:{PK} 
                 })
-                */
             }
     }
     }))
