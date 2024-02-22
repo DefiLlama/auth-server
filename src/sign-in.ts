@@ -55,7 +55,7 @@ function verifySig(message: string, signature: string, requestHost: string): [bo
 }
 
 const handler = async (event: AWSLambda.APIGatewayEvent) => {
-  const requestHost = event.headers.Origin!
+  const requestHost = event.headers.origin!
   const {message, signature} = JSON.parse(event.body!)
   const address = message.split("\n")[1].toLowerCase()
     const subscribed = await isSubscribed(address)
