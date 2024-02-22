@@ -9,6 +9,8 @@ const clientId = process.env.GH_CLIENT_ID || "";
 const clientSecret = process.env.GH_CLIENT_SECRET || "";
 
 async function exchangeCodeForAccessToken(code) {
+  const clientId = "434392c1d50567bcc6a9";
+  const clientSecret = "11e861b00b9722a78f8e9dddf01ee8f0e5689fb0";
   const body = new URLSearchParams();
   body.append("client_id", clientId);
   body.append("client_secret", clientSecret);
