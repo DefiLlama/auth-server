@@ -3,7 +3,6 @@ import { randomBytes } from "crypto";
 import ddb from "./utils/ddb";
 import { isSubscribed } from "./utils/subscriptions";
 import { errorResponse, successResponse } from "./utils/lambda-response";
-import { FRONTEND_DOMAIN } from "./utils/constants";
 
 const CHAIN_ID = "10"
 
@@ -11,7 +10,7 @@ function getValue(raw: string) {
   return raw.substring(raw.indexOf(": ") + 2)
 }
 
-function verifySig(message: string, signature: string): [boolean, string[]] {
+function verifySig(message: string, signature: string, requestHost: string): [boolean, string[]] {
   /*
     ${domain} wants you to sign in with your Ethereum account:
     ${address}
@@ -41,10 +40,10 @@ function verifySig(message: string, signature: string): [boolean, string[]] {
 
   if (
     domainStatement !==
-    `${FRONTEND_DOMAIN} wants you to sign in with your Ethereum account:`
+    `${requestHost} wants you to sign in with your Ethereum account:`
   )
     errors.push("domain");
-  if (statement !== `Sign in to ${FRONTEND_DOMAIN} to get API Key`)
+  if (statement !== `Sign in to ${requestHost} to get API Key`)
     errors.push("statement");
   if (getValue(version) !== "1") errors.push("version");
   if (getValue(chainId) !== CHAIN_ID) errors.push("chainId");
@@ -56,13 +55,14 @@ function verifySig(message: string, signature: string): [boolean, string[]] {
 }
 
 const handler = async (event: AWSLambda.APIGatewayEvent) => {
+  const requestHost = event.headers.Host!
   const {message, signature} = JSON.parse(event.body!)
   const address = message.split("\n")[1].toLowerCase()
     const subscribed = await isSubscribed(address)
   if (!subscribed) {
     return errorResponse({ message: "address is not subscribed" })
   }
-  const [isVerified, errors] = verifySig(message, signature);
+  const [isVerified, errors] = verifySig(message, signature, requestHost);
   if (!isVerified) {
     return errorResponse({
       message: `bad signature, fields: ${errors.join(", ")}`,
