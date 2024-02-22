@@ -46,6 +46,8 @@ provider:
               - "log-group:/aws/lambda/*:*:*"
   environment:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+    GH_CLIENT_ID: ${env:GH_CLIENT_ID}
+    GH_CLIENT_SECRET: ${env:GH_CLIENT_SECRET}
 
 custom:
   stage: ${opt:stage, self:provider.stage}
