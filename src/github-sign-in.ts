@@ -1,4 +1,5 @@
 import { randomBytes } from "crypto";
+import fetch from "node-fetch";
 import { errorResponse, successResponse } from "./utils/lambda-response";
 import ddb from "./utils/ddb";
 import { generateApiKey } from "./generateApiKey";
@@ -13,7 +14,7 @@ async function exchangeCodeForAccessToken(code) {
   body.append("client_secret", clientSecret);
   body.append("code", code);
 
-  const res = await fetch("https://github.com/login/oauth/access_token", {
+  const res: any = await fetch("https://github.com/login/oauth/access_token", {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
@@ -33,7 +34,7 @@ async function getGithubUser(accessToken) {
     headers: { Authorization: `Bearer ${accessToken}` },
   }).then((r) => r.json());
 
-  return res;
+  return res as { login: string };
 }
 
 const handler = async (event: AWSLambda.APIGatewayEvent) => {
