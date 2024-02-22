@@ -42,9 +42,9 @@ function verifySig(message: string, signature: string, requestHost: string): [bo
     domainStatement !==
     `${requestHost} wants you to sign in with your Ethereum account:`
   )
-    errors.push("domain");
+    errors.push("domain " + requestHost);
   if (statement !== `Sign in to ${requestHost} to get API Key`)
-    errors.push("statement");
+    errors.push("statement " + requestHost);
   if (getValue(version) !== "1") errors.push("version");
   if (getValue(chainId) !== CHAIN_ID) errors.push("chainId");
   if (new Date(getValue(issuedAt)).getTime() < Date.now() - 3 * 3600e3)
@@ -55,7 +55,7 @@ function verifySig(message: string, signature: string, requestHost: string): [bo
 }
 
 const handler = async (event: AWSLambda.APIGatewayEvent) => {
-  const requestHost = event.headers.Host!
+  const requestHost = event.headers.Origin!
   const {message, signature} = JSON.parse(event.body!)
   const address = message.split("\n")[1].toLowerCase()
     const subscribed = await isSubscribed(address)
