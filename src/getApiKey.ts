@@ -12,9 +12,13 @@ const handler = async (event: AWSLambda.APIGatewayEvent) => {
     const apikeyItem = await ddb.get({
         PK: `addressKey#${address}`
     })
+    const emailItem = await ddb.get({
+        PK: `email#${address}`
+    })
     const apiKey = apikeyItem.Item?.apiKey ?? null
+    const email = emailItem.Item?.email ?? null
     
-    return successResponse({apiKey})
+    return successResponse({apiKey, email})
 }
 
 export default handler

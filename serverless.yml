@@ -102,6 +102,13 @@ functions:
       - http:
           path: github-sign-in
           method: post
+  saveEmail:
+    handler: src/saveEmail.default
+    timeout: 30
+    events:
+      - http:
+          path: save-email
+          method: post
 
 plugins:
   - serverless-esbuild
